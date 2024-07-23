@@ -1,21 +1,16 @@
 <?php
 
-namespace Eadesigndev\RomCity\Block\Checkout;
+declare(strict_types=1);
 
-use Magento\Backend\Block\Template;
-use Eadesigndev\RomCity\Model\RomCityRepository;
-use Eadesigndev\RomCity\Model\RomCity;
+namespace Eadesigndev\RomCity\Model;
+
+use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Backend\Block\Template\Context;
 
-/**
- * Class CityUpdater
- * @package Eadesigndev\RomCity\Block\Checkout
- */
-class CityUpdater extends Template
+class Cities implements ConfigProviderInterface
 {
-     /** @var RomCityRepository  */
+    /** @var RomCityRepository  */
     private $romCityRepository;
 
     /** @var SearchCriteriaBuilder  */
@@ -25,22 +20,24 @@ class CityUpdater extends Template
     private $serializer;
 
     public function __construct(
-        Context $context,
         RomCityRepository $romCityRepository,
         SearchCriteriaBuilder $searchCriteria,
-        SerializerInterface $serializer,
-        array $data = []
-    )
-    {
-        $this->searchCriteria = $searchCriteria;
+        SerializerInterface $serializer
+    ) {
         $this->romCityRepository = $romCityRepository;
+        $this->searchCriteria = $searchCriteria;
         $this->serializer = $serializer;
-        parent::__construct($context, $data);
     }
 
-    public function citiesJson()
+    public function getConfig(): array
     {
+        return [
+            'cities' => $this->getCities()
+        ];
+    }
 
+    private function getCities(): string
+    {
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder->create();
 
@@ -51,7 +48,7 @@ class CityUpdater extends Template
 
         /** @var RomCity $item */
         foreach ($items as $item) {
-            $return[] = ['region_id' => $item->getRegionId(), 'city_name' => $item->getCityName()];
+            $return[$item->getRegionId()][] = $item->getCityName();
         }
 
         return $this->serializer->serialize($return);

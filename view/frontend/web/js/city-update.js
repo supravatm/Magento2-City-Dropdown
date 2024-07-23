@@ -24,12 +24,12 @@ define([
                     }
                 });
                 var city = $("[name*='city']"),
-                    selectCity = city.replaceWith("<select class='required-entry select admin__control-select' name='city' id='city'>") + '</select>',
+                    selectCity = city.replaceWith("<select class='required-entry' name='city' id='city'>") + '</select>',
                     htmlSelect = '<option>Selectati localitatea</option>',
                     options;
 
                 $.each(region, function (index, value) {
-                    if ( value == cityInput) {
+                    if ( value == cityInput.toUpperCase()) {
                         options = '<option value="' + value + '" selected>' + value + '</option>';
                     } else {
                         options = '<option value="' + value + '">' + value + '</option>';
@@ -57,7 +57,7 @@ define([
                     }
                 });
                 var city = $("[name*='" + cityInputName + "']"),
-                    selectCity = city.replaceWith("<select class='required-entry select admin__control-select' name='"+cityInputName+"' id='city'>") + '</select>',
+                    selectCity = city.replaceWith("<select class='required-entry' name='"+cityInputName+"' id='city'>") + '</select>',
                     htmlSelect = '<option>Selectati localitatea</option>',
                     options;
 

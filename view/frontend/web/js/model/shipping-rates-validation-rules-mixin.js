@@ -14,12 +14,10 @@ define(['jquery'], function ($) {
                 });
             });
 
-            observableFields.push('city_id'); // Load shipping method on City_id changed
-            observableFields.push('city'); // Load shipping method on City changed
+            observableFields.push('city');
 
             return observableFields;
-        };
-
+        }
         return targetFunction;
     };
 });
